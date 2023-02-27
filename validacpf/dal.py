@@ -1,11 +1,12 @@
 from model import Person
+from json import loads, dumps
 
 
 class PersonDal:
     @classmethod
     def save(cls, person: Person):
         with open('pessoa.txt', 'a') as arq:
-            arq.write(person.cpf + ' ')
+            arq.write(dumps(person.cpf) + ' ')
 
     @classmethod
     def check(cls):
@@ -14,5 +15,5 @@ class PersonDal:
             lines = arq.read()
 
         for line in lines.split():
-            cpfs.append(line)
+            cpfs.append(loads(line))
         return Person(cpfs)
