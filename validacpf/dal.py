@@ -1,19 +1,24 @@
-from model import Person
+from model import Person, Cpf
 from json import loads, dumps
+from connection import Session
 
 
 class PersonDal:
     @classmethod
     def save(cls, person: Person):
-        with open('pessoa.txt', 'a') as arq:
-            arq.write(dumps(person.cpf) + ' ')
+        session = Session()
+
+        new_cpf = Cpf(cpf=dumps(person.cpf))
+
+        session.add(new_cpf)
+        session.commit()
+        session.close()
 
     @classmethod
     def check(cls):
-        cpfs = []
-        with open('pessoa.txt', 'r') as arq:
-            lines = arq.read()
+        session = Session()
+        cpfs = session.query(Cpf).all()
 
-        for line in lines.split():
-            cpfs.append(loads(line))
+        cpfs = list(map(lambda x: loads(x.cpf), cpfs))
+
         return Person(cpfs)
