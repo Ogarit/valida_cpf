@@ -21,4 +21,6 @@ class PersonDal:
 
         cpfs = list(map(lambda x: loads(x.cpf), cpfs))
 
+        session.close()
+
         return Person(cpfs)
